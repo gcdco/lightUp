@@ -1,4 +1,4 @@
-from colors import WHITE, BLACK, GREEN, RED, YELLOW, LTYELLOW
+from colors import WHITE, BLACK, GREEN, RED, YELLOW, LTYELLOW, LIGHT
 
 ## Traversal functions
 ##
@@ -14,7 +14,6 @@ class Node:
     self.dn = None
     self.left = None
     self.right = None
-    self.light = False
     self.color = RED
 
 # Black square class
@@ -44,6 +43,9 @@ class WhiteNode(Node):
     self.color = WHITE
   
   def switchOn(self):
+    self.color = LIGHT
+    
+    """
     self.color = YELLOW
     self.light = True
     
@@ -55,6 +57,7 @@ class WhiteNode(Node):
     self.switchOnTraverse(head, goDown)
     head = self.up
     self.switchOnTraverse(head, goUp)
+    """
     
   # next = function that returns next (up,dn,lft,rt) link
   def switchOnTraverse(self, head, next):

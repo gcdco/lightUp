@@ -79,11 +79,7 @@ while not done:
       # Set that location to one
       if(g.board[row][column].color == WHITE):
         g.board[row][column].switchOn()
-        print("switch-on")
-      if(g.board[row][column].light == True):
-        g.board[row][column].switchOff()
-      #elif(g.board[row][column].color == RED):
-        #g.board[row][column].color = WHITE
+      
       print("Click ", pos, "Grid coordinates: ", row, column)
 
   # Set the screen background
@@ -97,9 +93,11 @@ while not done:
       pygame.draw.rect(screen, color,
                         [(MARGIN + WIDTH) * column + MARGIN,
                         (MARGIN + HEIGHT) * row + MARGIN, WIDTH, HEIGHT])
-      if g.board[row][column].light == True:
-        screen.blit(lightImg, [(MARGIN + WIDTH) * column + MARGIN + WIDTH/2.5,
+
+      if g.board[row][column].color == LIGHT:
+        screen.blit(lightImg, [(MARGIN + WIDTH) * column + MARGIN,
                         (MARGIN + HEIGHT) * row + MARGIN, WIDTH, HEIGHT])
+                        
       if g.board[row][column].color == GREEN:
         text = font.render(str(g.board[row][column].value), True, BLACK, GREEN)
         # create a rectangular object for the
