@@ -1,12 +1,5 @@
 from colors import WHITE, BLACK, GREEN, RED, YELLOW, LTYELLOW, LIGHT
 
-## Traversal functions
-##
-def goLeft(h): return h.left
-def goRight(h): return h.right
-def goDown(h): return h.dn
-def goUp(h): return h.up
-
 # Parent class
 class Node:
   def __init__(self):
@@ -41,39 +34,12 @@ class WhiteNode(Node):
     Node.__init__(self)
     self.lightConflict = 0
     self.color = WHITE
-  
-  def switchOn(self):
-    self.color = LIGHT
-    
-    """    """
-    head = self.left
-    self.switchOnTraverse(head, goLeft)
-    head = self.right
-    self.switchOnTraverse(head, goRight)
-    head = self.dn
-    self.switchOnTraverse(head, goDown)
-    head = self.up
-    self.switchOnTraverse(head, goUp)
-
-    
-  # next = function that returns next (up,dn,lft,rt) link
-  def switchOnTraverse(self, head, next):
-    while head != None:
-      if head.color == WHITE:
-        head.color = LTYELLOW
-      elif head.color == BLACK:
-        head = None
-      elif head.color == GREEN:
-        head = None
-      
-      if head != None:
-        head = next(head)
 
 
   def switchOff(self):
     self.color = WHITE
     
-    """ """
+    """ 
     head = self.left
     self.switchOffTraverse(head, goLeft)
     head = self.right
@@ -82,7 +48,7 @@ class WhiteNode(Node):
     self.switchOffTraverse(head, goDown)
     head = self.up
     self.switchOffTraverse(head, goUp)
-    
+    """
   
   # next = function that returns next (up,dn,lft,rt) link
   def switchOffTraverse(self, head, next):

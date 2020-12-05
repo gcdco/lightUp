@@ -1,11 +1,20 @@
 import node
-from colors import WHITE, BLACK, GREEN, RED
+from colors import WHITE, BLACK, GREEN, RED, YELLOW, LTYELLOW, LIGHT, LIGHT_ERROR
 
 BOARD_SIZE = 7
+
+## Traversal functions
+##
+def goLeft(h): return h.left
+def goRight(h): return h.right
+def goDown(h): return h.dn
+def goUp(h): return h.up
 
 class Game:
   def __init__(self, lines):
     self.board = []
+    self.lights = []
+    self.white_spaces = []
     
     # Make the board
     for row in range(0,BOARD_SIZE):
@@ -22,6 +31,7 @@ class Game:
         if typeSpace == 'w':
           wspace = node.WhiteNode()
           self.board[row][column] = wspace
+          self.white_spaces.append(wspace)
         if typeSpace == 'b':
           bspace = node.BlackNode()
           self.board[row][column] = bspace
@@ -33,41 +43,77 @@ class Game:
     self.setUpLinks()
 
   def setUpLinks(self):
-    # Set-up top row
-    for x in range(0,BOARD_SIZE):
-        self.board[0][x].dn = self.board[1][x]
-        if(x < BOARD_SIZE - 1):
-          self.board[0][x].right = self.board[0][x+1]
-        if(x > 0):
-          self.board[0][x].left = self.board[0][x-1]
-    # Set-up right row
-    for x in range(0,BOARD_SIZE):
-      self.board[x][BOARD_SIZE - 1].left = self.board[x][BOARD_SIZE - 2]
-      if (x < 6):
-        self.board[x][BOARD_SIZE - 1].dn = self.board[x+1][BOARD_SIZE - 1]
-      if (x > 0):
-        self.board[x][BOARD_SIZE - 1].up = self.board[x-1][BOARD_SIZE - 1]
-    # Set-up bottom row
-    for x in range(0,BOARD_SIZE):
-      self.board[BOARD_SIZE - 1][x].up = self.board[BOARD_SIZE - 2][x]
-      if(x < 6):
-        self.board[BOARD_SIZE - 1][x].right = self.board[BOARD_SIZE - 1][x+1]
-      if(x > 0):
-        self.board[BOARD_SIZE - 1][x].left = self.board[BOARD_SIZE - 1][x-1]
-    # Set-up left row
-    for x in range(0,BOARD_SIZE):
-      self.board[x][0].right = self.board[x][1]
-      if(x < BOARD_SIZE - 1):
-        self.board[x][0].dn = self.board[x+1][0]
-      if(x > 0):
-        self.board[x][0].up = self.board[x-1][0]
-    # Set-up middle rows
-    for x in range(1,BOARD_SIZE-1):
-      for y in range(1,BOARD_SIZE-1):
-        self.board[x][y].up = self.board[x-1][y]
-        self.board[x][y].right = self.board[x][y+1]
-        self.board[x][y].dn = self.board[x+1][y]
-        self.board[x][y].left = self.board[x][y-1]
+    # Link dn and up
+    for x in range(BOARD_SIZE - 1):
+      for y in range(BOARD_SIZE - 1):
+        if x == 0:
+          self.board[x][y].dn = self.board[x+1][y]
+        elif x == BOARD_SIZE - 1:
+          self.board[x][y].up = self.board[x-1][y]
+        else:
+          self.board[x][y].dn = self.board[x+1][y]
+          self.board[x][y].up = self.board[x-1][y]
+    # Link right and left
+    for x in range(BOARD_SIZE - 1):
+      for y in range(BOARD_SIZE - 1):
+        if y == 0:
+          self.board[x][y].right = self.board[x][y+1]
+        elif y == BOARD_SIZE - 1:
+          self.board[x][y].left = self.board[x][y-1]
+        else:
+          self.board[x][y].right = self.board[x][y+1]
+          self.board[x][y].left = self.board[x][y-1]
+    
+    
+
+  def is_alight(self, row, column):
+    return self.board[row][column] in self.lights
+
+  def get_color(self, row, column):
+    return self.board[row][column].color
+  
+  def set_color(self, row, column, color):
+    self.board[row][column].color = color
+    
+  def switch_on(self, row, column):
+    self.lights.append(self.board[row][column])
+    self.board[row][column].color = LIGHT
+  
+  def switch_off(self, row, column):
+    self.board[row][column].color = WHITE
+    self.lights.remove(self.board[row][column])
+    
+    
+  def render_board(self):
+    for head in self.white_spaces:
+      if head.color not in [LIGHT,LIGHT_ERROR]:
+        head.color = WHITE
+    
+    for head in self.lights:
+      head = head.left
+      self.switchOnTraverse(head, goLeft)
+      head = head.right
+      self.switchOnTraverse(head, goRight)
+      head = head.dn
+      self.switchOnTraverse(head, goDown)
+      try:
+        head = head.up
+        self.switchOnTraverse(head, goUp)
+      except:
+        pass    
+    
+  # next = function that returns next (up,dn,lft,rt) link
+  def switchOnTraverse(self, head, next):
+    while head != None:
+      if head.color == WHITE:
+        head.color = LTYELLOW
+      elif head.color == BLACK:
+        head = None
+      elif head.color == GREEN:
+        head = None
+      
+      if head != None:
+        head = next(head)
 
   def printBoard(self):
     for x in self.board:

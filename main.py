@@ -14,7 +14,7 @@
 import pygame
 from readfile import readFile
 from game import Game
-from colors import WHITE, BLACK, GREEN, YELLOW, RED, GRAY, BLUE, LIGHT, LTYELLOW
+from colors import WHITE, BLACK, GREEN, YELLOW, RED, GRAY, BLUE, LIGHT, LIGHT_ERROR, LTYELLOW
 
 # This sets the WIDTH and HEIGHT of each grid location
 WIDTH = 75
@@ -76,18 +76,24 @@ while not done:
       # Change the x/y screen coordinates to grid coordinates
       column = pos[0] // (WIDTH + MARGIN)
       row = pos[1] // (HEIGHT + MARGIN)
+      
+      
       # Set that location to one
-      if(g.board[row][column].color == WHITE):
-        g.board[row][column].switchOn()
-      elif(g.board[row][column].color == LTYELLOW):
-        g.board[row][column].switchOn()
-      elif(g.board[row][column].color == LIGHT):
-        g.board[row][column].switchOff()
+      if(g.get_color(row,column) == WHITE):
+        g.switch_on(row,column)
+      elif(g.get_color(row,column) == LTYELLOW):
+        g.switch_on(row,column)
+      elif(g.get_color(row,column) == LIGHT):
+        g.switch_off(row,column)
       
       print("Click ", pos, "Grid coordinates: ", row, column)
 
   # Set the screen background
   screen.fill(BLACK)
+  
+ 
+  # Render the board
+  g.render_board()
 
   # Draw the grid
   for row in range(BOARD_SIZE):
@@ -98,11 +104,11 @@ while not done:
                         [(MARGIN + WIDTH) * column + MARGIN,
                         (MARGIN + HEIGHT) * row + MARGIN, WIDTH, HEIGHT])
 
-      if g.board[row][column].color == LIGHT:
+      if g.get_color(row, column) in [LIGHT,LIGHT_ERROR]:
         screen.blit(lightImg, [(MARGIN + WIDTH) * column + MARGIN,
                         (MARGIN + HEIGHT) * row + MARGIN, WIDTH, HEIGHT])
-                        
-      if g.board[row][column].color == GREEN:
+      
+      if g.get_color(row, column) == GREEN:
         text = font.render(str(g.board[row][column].value), True, BLACK, GREEN)
         # create a rectangular object for the
         # text surface object
