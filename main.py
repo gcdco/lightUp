@@ -14,12 +14,14 @@
 import pygame
 from readfile import readFile
 from game import Game
-from colors import WHITE, BLACK, GREEN, YELLOW, RED, GRAY, BLUE
+from colors import WHITE, BLACK, GREEN, YELLOW, RED, GRAY, BLUE, LIGHT, LIGHT_ERROR
 
 # This sets the WIDTH and HEIGHT of each grid location
-WIDTH = 50
-HEIGHT = 50
+WIDTH = 75
+HEIGHT = 75
 BOARD_SIZE = 7
+
+
 
 # This sets the margin between each cell
 MARGIN = 5
@@ -43,7 +45,7 @@ pygame.init()
 
 # Set the HEIGHT and WIDTH of the screen
 #(MARGIN + 50) + MARGIN
-WINDOW_SIZE = [500, 500]
+WINDOW_SIZE = [1000, 800]
 screen = pygame.display.set_mode(WINDOW_SIZE)
 
 lightImg = pygame.image.load('lightbulb.png')
@@ -65,62 +67,60 @@ g = Game(lines)
 
 # -------- Main Program Loop -----------
 while not done:
-    for event in pygame.event.get():  # User did something
-        if event.type == pygame.QUIT:  # If user clicked close
-            done = True  # Flag that we are done so we exit this loop
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            # User clicks the mouse. Get the position
-            pos = pygame.mouse.get_pos()
-            # Change the x/y screen coordinates to grid coordinates
-            column = pos[0] // (WIDTH + MARGIN)
-            row = pos[1] // (HEIGHT + MARGIN)
-            # Set that location to one
-            #grid[row][column] = 1
-            if(g.board[row][column].color == WHITE):
-              g.board[row][column].switchOn()
-            if(g.board[row][column].color == LIGHT):
-              g.board[row][column].switchOn()
-            elif(g.board[row][column].color == RED):
-              g.board[row][column].color = WHITE
-            print("Click ", pos, "Grid coordinates: ", row, column)
+  for event in pygame.event.get():  # User did something
+    if event.type == pygame.QUIT:  # If user clicked close
+      done = True  # Flag that we are done so we exit this loop
+    elif event.type == pygame.MOUSEBUTTONDOWN:
+      # User clicks the mouse. Get the position
+      pos = pygame.mouse.get_pos()
+      # Change the x/y screen coordinates to grid coordinates
+      column = pos[0] // (WIDTH + MARGIN)
+      row = pos[1] // (HEIGHT + MARGIN)
+      # Set that location to one
+      if(g.board[row][column].color == WHITE):
+        g.board[row][column].switchOn()
+        print("switch-on")
+      if(g.board[row][column].light == True):
+        g.board[row][column].switchOff()
+      #elif(g.board[row][column].color == RED):
+        #g.board[row][column].color = WHITE
+      print("Click ", pos, "Grid coordinates: ", row, column)
 
-    # Set the screen background
-    screen.fill(BLACK)
+  # Set the screen background
+  screen.fill(BLACK)
 
-    # Draw the grid
-    for row in range(BOARD_SIZE):
-        for column in range(BOARD_SIZE):
-            #color = WHITE
-            color = g.board[row][column].color
-            #if grid[row][column] == 1:
-                #color = GREEN
-            pygame.draw.rect(screen, color,
-                             [(MARGIN + WIDTH) * column + MARGIN,
-                              (MARGIN + HEIGHT) * row + MARGIN, WIDTH, HEIGHT])
-            if g.board[row][column].color == YELLOW:
-              screen.blit(lightImg, [(MARGIN + WIDTH) * column + MARGIN,
-                              (MARGIN + HEIGHT) * row + MARGIN, WIDTH, HEIGHT])
-            if g.board[row][column].color == GREEN:
-              text = font.render(str(g.board[row][column].value), True, BLACK, GREEN)
-              # create a rectangular object for the
-              # text surface object
-              textRect = text.get_rect()
-              
-              # set the center of the rectangular object.
-              textRect.center = ([((MARGIN + WIDTH) * column + MARGIN) + WIDTH/2,
-                              ((MARGIN + HEIGHT) * row + MARGIN) + HEIGHT/2])
+  # Draw the grid
+  for row in range(BOARD_SIZE):
+    for column in range(BOARD_SIZE):
+      color = g.board[row][column].color
+      
+      pygame.draw.rect(screen, color,
+                        [(MARGIN + WIDTH) * column + MARGIN,
+                        (MARGIN + HEIGHT) * row + MARGIN, WIDTH, HEIGHT])
+      if g.board[row][column].light == True:
+        screen.blit(lightImg, [(MARGIN + WIDTH) * column + MARGIN + WIDTH/2.5,
+                        (MARGIN + HEIGHT) * row + MARGIN, WIDTH, HEIGHT])
+      if g.board[row][column].color == GREEN:
+        text = font.render(str(g.board[row][column].value), True, BLACK, GREEN)
+        # create a rectangular object for the
+        # text surface object
+        textRect = text.get_rect()
+        
+        # set the center of the rectangular object.
+        textRect.center = ([((MARGIN + WIDTH) * column + MARGIN) + WIDTH/2,
+                        ((MARGIN + HEIGHT) * row + MARGIN) + HEIGHT/2])
 
-              # copying the text surface object
-              # to the display surface object
-              # at the center coordinate.
-              screen.blit(text, textRect)
+        # copying the text surface object
+        # to the display surface object
+        # at the center coordinate.
+        screen.blit(text, textRect)
 
 
-    # Limit to 60 frames per second
-    clock.tick(60)
+  # Limit to 60 frames per second
+  clock.tick(60)
 
-    # Go ahead and update the screen with what we've drawn.
-    pygame.display.flip()
+  # Go ahead and update the screen with what we've drawn.
+  pygame.display.flip()
 
 # Be IDLE friendly. If you forget this line, the program will 'hang'
 # on exit.
