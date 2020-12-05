@@ -45,10 +45,7 @@ class WhiteNode(Node):
   def switchOn(self):
     self.color = LIGHT
     
-    """
-    self.color = YELLOW
-    self.light = True
-    
+    """    """
     head = self.left
     self.switchOnTraverse(head, goLeft)
     head = self.right
@@ -57,20 +54,16 @@ class WhiteNode(Node):
     self.switchOnTraverse(head, goDown)
     head = self.up
     self.switchOnTraverse(head, goUp)
-    """
+
     
   # next = function that returns next (up,dn,lft,rt) link
   def switchOnTraverse(self, head, next):
     while head != None:
       if head.color == WHITE:
         head.color = LTYELLOW
-        
-      if head.light == True:
-        head.color = YELLOW
-        
-      if head.color == BLACK:
+      elif head.color == BLACK:
         head = None
-      if head.color == GREEN:
+      elif head.color == GREEN:
         head = None
       
       if head != None:
@@ -79,8 +72,8 @@ class WhiteNode(Node):
 
   def switchOff(self):
     self.color = WHITE
-    #self.light = False
     
+    """ """
     head = self.left
     self.switchOffTraverse(head, goLeft)
     head = self.right
@@ -89,16 +82,21 @@ class WhiteNode(Node):
     self.switchOffTraverse(head, goDown)
     head = self.up
     self.switchOffTraverse(head, goUp)
+    
   
   # next = function that returns next (up,dn,lft,rt) link
   def switchOffTraverse(self, head, next):
     while head is not None:
-      if head.color != BLACK:
-        if head.color != GREEN:
-          #if head.lightConflict > 0:
-            #head.lightConflict -= 1
-          head.color = WHITE
-      head = next(head)
+      if head.color == LTYELLOW:
+        head.color = WHITE
+      elif head.color != BLACK:
+        head = None
+      elif head.color != GREEN:
+        head = None
+      
+      
+      if head != None:
+        head = next(head)
 
   def __str__(self):
     return 'W'
