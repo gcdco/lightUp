@@ -86,17 +86,24 @@ class WhiteNode(Node):
   
   # next = function that returns next (up,dn,lft,rt) link
   def switchOffTraverse(self, head, next):
+    queue = []
     while head is not None:
       if head.color == LTYELLOW:
         head.color = WHITE
+      elif head.color == LIGHT:
+        head.color = WHITE
+        queue.append(head)
       elif head.color != BLACK:
         head = None
       elif head.color != GREEN:
         head = None
       
-      
       if head != None:
         head = next(head)
+        
+    for n in queue:
+      n.switchOn()
+      
 
   def __str__(self):
     return 'W'

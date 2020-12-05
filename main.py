@@ -14,7 +14,7 @@
 import pygame
 from readfile import readFile
 from game import Game
-from colors import WHITE, BLACK, GREEN, YELLOW, RED, GRAY, BLUE, LIGHT, LIGHT_ERROR
+from colors import WHITE, BLACK, GREEN, YELLOW, RED, GRAY, BLUE, LIGHT, LTYELLOW
 
 # This sets the WIDTH and HEIGHT of each grid location
 WIDTH = 75
@@ -79,6 +79,10 @@ while not done:
       # Set that location to one
       if(g.board[row][column].color == WHITE):
         g.board[row][column].switchOn()
+      elif(g.board[row][column].color == LTYELLOW):
+        g.board[row][column].switchOn()
+      elif(g.board[row][column].color == LIGHT):
+        g.board[row][column].switchOff()
       
       print("Click ", pos, "Grid coordinates: ", row, column)
 
