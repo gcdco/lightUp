@@ -29,7 +29,9 @@ pygame.init()
 
 # Set the HEIGHT and WIDTH of the screen
 #(MARGIN + 50) + MARGIN
-WINDOW_SIZE = [1000, 800]
+WINDOW_SIZE_X = 1000
+WINDOW_SIZE_Y = 800
+WINDOW_SIZE = [WINDOW_SIZE_X, WINDOW_SIZE_Y]
 screen = pygame.display.set_mode(WINDOW_SIZE)
 
 lightImg = pygame.image.load('lightbulb.png')
@@ -49,13 +51,6 @@ lines = rfile.read()
 g = Game(lines)
 
 
-
-for x in range(0,BOARD_SIZE):
-  for y in range(0,BOARD_SIZE):
-    print(g.board[x][y].dn,end='   ')
-  print("\n")
-
-
 # -------- Main Program Loop -----------
 while not done:
   for event in pygame.event.get():  # User did something
@@ -68,14 +63,20 @@ while not done:
       column = pos[0] // (WIDTH + MARGIN)
       row = pos[1] // (HEIGHT + MARGIN)
       
-      
-      # Set that location to one
-      if(g.get_color(row,column) == WHITE):
-        g.switch_on(row,column)
-      elif(g.get_color(row,column) == LTYELLOW):
-        g.switch_on(row,column)
-      elif(g.get_color(row,column) == LIGHT):
-        g.switch_off(row,column)
+      # Button click
+      if (((WIDTH + MARGIN) * BOARD_SIZE + WIDTH) < pos[0] < ((WIDTH + MARGIN) * BOARD_SIZE + WIDTH) + WIDTH*2):
+        g.verify()
+        
+      # Click in the grid
+      if column < BOARD_SIZE:
+        if row < BOARD_SIZE:
+          # Set that location to one
+          if(g.get_color(row,column) == WHITE):
+            g.switch_on(row,column)
+          elif(g.get_color(row,column) == YELLOW):
+            g.switch_on(row,column)
+          elif(g.get_color(row,column) == LIGHT):
+            g.switch_off(row,column)
       
       print("Click ", pos, "Grid coordinates: ", row, column)
 
@@ -85,6 +86,7 @@ while not done:
  
   # Render the board
   g.render_board()
+  
 
   # Draw the grid
   for row in range(BOARD_SIZE):
@@ -114,6 +116,13 @@ while not done:
         # at the center coordinate.
         screen.blit(text, textRect)
 
+  # Draw Button
+  # Rect(left, top, width, height)
+  pygame.draw.rect(screen, GREEN, [(WIDTH + MARGIN) * BOARD_SIZE + WIDTH, 5, 150, 75])
+  text = font.render("VERIFY", True, BLACK, GREEN)
+  textRect = text.get_rect()
+  textRect.center = ([(WIDTH + MARGIN) * BOARD_SIZE + WIDTH * 2, HEIGHT/2 + MARGIN])
+  screen.blit(text, textRect)
 
   # Limit to 60 frames per second
   clock.tick(60)

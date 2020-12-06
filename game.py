@@ -15,6 +15,7 @@ class Game:
     self.board = []
     self.lights = []
     self.white_spaces = []
+    self.numbered_spaces = []
     
     # Make the board
     for row in range(0,BOARD_SIZE):
@@ -36,8 +37,9 @@ class Game:
           bspace = node.BlackNode()
           self.board[row][column] = bspace
         if len(typeSpace) == 2:
-          nspace = node.NumberedNode(typeSpace[1])
+          nspace = node.NumberedNode(int(typeSpace[1]))
           self.board[row][column] = nspace
+          self.numbered_spaces.append(nspace)
     
     self.setUpLinks()
 
@@ -77,32 +79,73 @@ class Game:
         self.board[x][y].right = self.board[x][y+1]
         self.board[x][y].dn = self.board[x+1][y]
         self.board[x][y].left = self.board[x][y-1]
-    """
-    # Link dn and up
-    for x in range(BOARD_SIZE - 1):
-      for y in range(BOARD_SIZE - 1):
-        if x == 0:
-          self.board[x][y].dn = self.board[x+1][y]
-        elif x == BOARD_SIZE - 1:
-          self.board[x][y].up = self.board[x-1][y]
-        else:
-          self.board[x][y].dn = self.board[x+1][y]
-          self.board[x][y].up = self.board[x-1][y]
-    # Link right and left
-    for x in range(BOARD_SIZE - 1):
-      for y in range(BOARD_SIZE - 1):
-        if y == 0:
-          self.board[x][y].right = self.board[x][y+1]
-        elif y == BOARD_SIZE - 1:
-          self.board[x][y].left = self.board[x][y-1]
-        else:
-          self.board[x][y].right = self.board[x][y+1]
-          self.board[x][y].left = self.board[x][y-1] """
-    
-    
 
-  def is_alight(self, row, column):
-    return self.board[row][column] in self.lights
+  # Call after rendering board
+  def verify(self):
+    white_space_bool = True
+    numbered_space_bool = True
+    light_bool = True
+    # Check that white spaces are all lit
+    for n in self.white_spaces:
+      if n.color != YELLOW:
+        if n.color != LIGHT:
+          white_space_bool = False
+    # Check that numbered spaces have appropriate number of lights adjacent
+    for n in self.numbered_spaces:
+      if (self.verify_numbered_space(n) == False):
+        numbered_space_bool = False
+    # Check for collisions
+    for head in self.lights:
+      if (not self.verify_light_space(head, goLeft)):
+        light_bool = False
+        head.color = LIGHT_ERROR
+      if (not self.verify_light_space(head, goRight)):
+        light_bool = False
+        head.color = LIGHT_ERROR
+      if (not self.verify_light_space(head, goUp)):
+        light_bool = False
+        head.color = LIGHT_ERROR
+      if (not self.verify_light_space(head, goDown)):
+        light_bool = False
+        head.color = LIGHT_ERROR
+    
+    print(light_bool and white_space_bool and numbered_space_bool)
+    return light_bool and white_space_bool and numbered_space_bool
+
+  # Return true if no conflicts
+  def verify_light_space(self, head, next):
+    if head != None:
+        head = next(head)
+    while head != None:
+      if head.color == LIGHT:
+        if head.color == LIGHT_ERROR:
+          return False
+      elif head.color == BLACK:
+        head = None
+      elif head.color == GREEN:
+        head = None
+      
+      if head != None:
+        head = next(head)
+    return True
+
+  # Helper function to check numbered spaces
+  def verify_numbered_space(self, head):
+    count = 0
+    required = head.value
+    if head.up != None:
+      if head.up.color == LIGHT:
+        count += 1
+    if head.right != None:
+      if head.right.color == LIGHT:
+        count += 1
+    if head.dn != None:
+      if head.dn.color == LIGHT:
+        count += 1
+    if head.left != None:
+      if head.left.color == LIGHT:
+        count += 1
+    return count >= required
 
   def get_color(self, row, column):
     return self.board[row][column].color
@@ -125,23 +168,22 @@ class Game:
         head.color = WHITE
     
     for head in self.lights:
-      #head = head.left
       self.switchOnTraverse(head, goLeft)
-      #head = head.right
       self.switchOnTraverse(head, goRight)
-      #head = head.dn
       self.switchOnTraverse(head, goDown)
       try:
-        #head = head.up
         self.switchOnTraverse(head, goUp)
       except:
         pass    
     
   # next = function that returns next (up,dn,lft,rt) link
   def switchOnTraverse(self, head, next):
+    #if head != None:
+        #head = next(head)
+    
     while head != None:
       if head.color == WHITE:
-        head.color = LTYELLOW
+        head.color = YELLOW
       elif head.color == BLACK:
         head = None
       elif head.color == GREEN:
@@ -156,30 +198,6 @@ class Game:
         print(y, end='   ')
       print("\n")
   
-  def printDown(self,x=0,y=0):
-    head = self.board[x][y]
-    while head is not None:
-      print(head)
-      head = head.dn
-  
-  def printRight(self,x=0,y=0):
-    head = self.board[x][y]
-    while head is not None:
-      print(head, end="   ")
-      head = head.right
-
-  def printLeft(self,x=0,y=0):
-    head = self.board[x][y]
-    while head is not None:
-      print(head, end="   ")
-      head = head.left
-
-  def printUp(self,x=0,y=0):
-    head = self.board[x][y]
-    while head is not None:
-      print(head)
-      head = head.up
-
 
 # Read lines from a text file
 # Split lines by commas and add them to the array
