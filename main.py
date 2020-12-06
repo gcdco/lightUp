@@ -50,6 +50,41 @@ rfile = readFile('boards.txt')
 lines = rfile.read()
 g = Game(lines)
 
+def draw_board():
+  for row in range(BOARD_SIZE):
+    for column in range(BOARD_SIZE):
+      color = g.board[row][column].color
+      
+      pygame.draw.rect(screen, color,
+                        [(MARGIN + WIDTH) * column + MARGIN,
+                        (MARGIN + HEIGHT) * row + MARGIN, WIDTH, HEIGHT])
+  
+      if g.get_color(row, column) in [LIGHT,LIGHT_ERROR]:
+        screen.blit(lightImg, [(MARGIN + WIDTH) * column + MARGIN,
+                        (MARGIN + HEIGHT) * row + MARGIN, WIDTH, HEIGHT])
+      
+      if g.get_color(row, column) == GREEN:
+        text = font.render(str(g.board[row][column].value), True, BLACK, GREEN)
+        # create a rectangular object for the
+        # text surface object
+        textRect = text.get_rect()
+        
+        # set the center of the rectangular object.
+        textRect.center = ([((MARGIN + WIDTH) * column + MARGIN) + WIDTH/2,
+                        ((MARGIN + HEIGHT) * row + MARGIN) + HEIGHT/2])
+  
+        # copying the text surface object
+        # to the display surface object
+        # at the center coordinate.
+        screen.blit(text, textRect)
+
+def draw_button():
+  # Rect(left, top, width, height)
+  pygame.draw.rect(screen, GREEN, [(WIDTH + MARGIN) * BOARD_SIZE + WIDTH, 5, 150, 75])
+  text = font.render("VERIFY", True, BLACK, GREEN)
+  textRect = text.get_rect()
+  textRect.center = ([(WIDTH + MARGIN) * BOARD_SIZE + WIDTH * 2, HEIGHT/2 + MARGIN])
+  screen.blit(text, textRect)
 
 # -------- Main Program Loop -----------
 while not done:
@@ -89,40 +124,10 @@ while not done:
   
 
   # Draw the grid
-  for row in range(BOARD_SIZE):
-    for column in range(BOARD_SIZE):
-      color = g.board[row][column].color
-      
-      pygame.draw.rect(screen, color,
-                        [(MARGIN + WIDTH) * column + MARGIN,
-                        (MARGIN + HEIGHT) * row + MARGIN, WIDTH, HEIGHT])
-
-      if g.get_color(row, column) in [LIGHT,LIGHT_ERROR]:
-        screen.blit(lightImg, [(MARGIN + WIDTH) * column + MARGIN,
-                        (MARGIN + HEIGHT) * row + MARGIN, WIDTH, HEIGHT])
-      
-      if g.get_color(row, column) == GREEN:
-        text = font.render(str(g.board[row][column].value), True, BLACK, GREEN)
-        # create a rectangular object for the
-        # text surface object
-        textRect = text.get_rect()
-        
-        # set the center of the rectangular object.
-        textRect.center = ([((MARGIN + WIDTH) * column + MARGIN) + WIDTH/2,
-                        ((MARGIN + HEIGHT) * row + MARGIN) + HEIGHT/2])
-
-        # copying the text surface object
-        # to the display surface object
-        # at the center coordinate.
-        screen.blit(text, textRect)
+  draw_board()
 
   # Draw Button
-  # Rect(left, top, width, height)
-  pygame.draw.rect(screen, GREEN, [(WIDTH + MARGIN) * BOARD_SIZE + WIDTH, 5, 150, 75])
-  text = font.render("VERIFY", True, BLACK, GREEN)
-  textRect = text.get_rect()
-  textRect.center = ([(WIDTH + MARGIN) * BOARD_SIZE + WIDTH * 2, HEIGHT/2 + MARGIN])
-  screen.blit(text, textRect)
+  draw_button()
 
   # Limit to 60 frames per second
   clock.tick(60)

@@ -1,0 +1,63 @@
+# First Step
+  #Populate numbered black squares
+
+# Pre-processing
+  # 1. [] list of white squares
+  # 2. [] list of numbered squares
+  # 3. [] list of lights?
+
+# Initial Population
+  # Set each numbered space w/ appropriate amt of lights
+
+# Fitness
+  # Check whether their are conflicts w/ lights
+  
+
+# Loop while not fitness
+
+  #Selection
+    #Get first fittest
+    #Get second fittest
+  
+  #Crossover
+    #Find Crossover point
+    #Swap values between first- and second- fittest
+  
+  #Mutation
+    #Pick random numbered space to mutate
+    #Pick new configuration for lights
+
+  #Fitness
+    # Check whether their are conflicts w/ lights
+
+# Send fit population to second step
+
+# Second Step
+  #Populate white squares not besides numbered black squares
+
+# Pre-processing
+  #Filter out white spaces besides numbered spaces
+
+# Initial Population
+  #Place lights in available white spaces
+
+# Fitness
+  #Verify Solution
+    #Verify white spaces are yellow
+    #Verify light spaces (found in this step) have no conflicts
+
+# Loop
+
+  #Selection
+    #Get first fittest
+    #Get second fittest
+    
+  #Crossover
+    #Find Crossover point
+    #Swap values between first- and second- fittest
+
+  #Mutation
+    #Pick random numbered space to mutate
+    #Pick new configuration for lights
+
+  #Fitness
