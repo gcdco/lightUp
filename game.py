@@ -38,11 +38,46 @@ class Game:
         if len(typeSpace) == 2:
           nspace = node.NumberedNode(typeSpace[1])
           self.board[row][column] = nspace
-          #self.board[row].append(lines[row].pop(0))
     
     self.setUpLinks()
 
   def setUpLinks(self):
+    # Set-up top row
+    for x in range(0,BOARD_SIZE):
+        self.board[0][x].dn = self.board[1][x]
+        if(x < BOARD_SIZE - 1):
+          self.board[0][x].right = self.board[0][x+1]
+        if(x > 0):
+          self.board[0][x].left = self.board[0][x-1]
+    # Set-up right row
+    for x in range(0,BOARD_SIZE):
+      self.board[x][BOARD_SIZE - 1].left = self.board[x][BOARD_SIZE - 2]
+      if (x < 6):
+        self.board[x][BOARD_SIZE - 1].dn = self.board[x+1][BOARD_SIZE - 1]
+      if (x > 0):
+        self.board[x][BOARD_SIZE - 1].up = self.board[x-1][BOARD_SIZE - 1]
+    # Set-up bottom row
+    for x in range(0,BOARD_SIZE):
+      self.board[BOARD_SIZE - 1][x].up = self.board[BOARD_SIZE - 2][x]
+      if(x < 6):
+        self.board[BOARD_SIZE - 1][x].right = self.board[BOARD_SIZE - 1][x+1]
+      if(x > 0):
+        self.board[BOARD_SIZE - 1][x].left = self.board[BOARD_SIZE - 1][x-1]
+    # Set-up left row
+    for x in range(0,BOARD_SIZE):
+      self.board[x][0].right = self.board[x][1]
+      if(x < BOARD_SIZE - 1):
+        self.board[x][0].dn = self.board[x+1][0]
+      if(x > 0):
+        self.board[x][0].up = self.board[x-1][0]
+    # Set-up middle rows
+    for x in range(1,BOARD_SIZE-1):
+      for y in range(1,BOARD_SIZE-1):
+        self.board[x][y].up = self.board[x-1][y]
+        self.board[x][y].right = self.board[x][y+1]
+        self.board[x][y].dn = self.board[x+1][y]
+        self.board[x][y].left = self.board[x][y-1]
+    """
     # Link dn and up
     for x in range(BOARD_SIZE - 1):
       for y in range(BOARD_SIZE - 1):
@@ -62,7 +97,7 @@ class Game:
           self.board[x][y].left = self.board[x][y-1]
         else:
           self.board[x][y].right = self.board[x][y+1]
-          self.board[x][y].left = self.board[x][y-1]
+          self.board[x][y].left = self.board[x][y-1] """
     
     
 
@@ -90,14 +125,14 @@ class Game:
         head.color = WHITE
     
     for head in self.lights:
-      head = head.left
+      #head = head.left
       self.switchOnTraverse(head, goLeft)
-      head = head.right
+      #head = head.right
       self.switchOnTraverse(head, goRight)
-      head = head.dn
+      #head = head.dn
       self.switchOnTraverse(head, goDown)
       try:
-        head = head.up
+        #head = head.up
         self.switchOnTraverse(head, goUp)
       except:
         pass    

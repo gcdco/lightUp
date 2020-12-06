@@ -21,24 +21,8 @@ WIDTH = 75
 HEIGHT = 75
 BOARD_SIZE = 7
 
-
-
 # This sets the margin between each cell
 MARGIN = 5
-
-# Create a 2 dimensional array. A two dimensional
-# array is simply a list of lists.
-grid = []
-for row in range(BOARD_SIZE):
-    # Add an empty array that will hold each cell
-    # in this row
-    grid.append([])
-    for column in range(BOARD_SIZE):
-        grid[row].append(0)  # Append a cell
-
-# Set row 1, cell 5 to one. (Remember rows and
-# column numbers start at zero.)
-grid[5][5] = 1
 
 # Initialize pygame
 pygame.init()
@@ -63,6 +47,13 @@ clock = pygame.time.Clock()
 rfile = readFile('boards.txt')
 lines = rfile.read()
 g = Game(lines)
+
+
+
+for x in range(0,BOARD_SIZE):
+  for y in range(0,BOARD_SIZE):
+    print(g.board[x][y].dn,end='   ')
+  print("\n")
 
 
 # -------- Main Program Loop -----------
@@ -90,7 +81,7 @@ while not done:
 
   # Set the screen background
   screen.fill(BLACK)
-  
+
  
   # Render the board
   g.render_board()
