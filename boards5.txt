@@ -1,0 +1,7 @@
+b1,w,w,w,w,w,b
+w,w,w,w,w,w,w
+w,w,w,b1,w,w,w
+w,w,b,b,b3,w,w
+w,w,w,b3,w,w,w
+w,w,w,w,w,w,w
+b1,w,w,w,w,w,b
