@@ -86,7 +86,16 @@ def draw_button():
   textRect.center = ([(WIDTH + MARGIN) * BOARD_SIZE + WIDTH * 2, HEIGHT/2 + MARGIN])
   screen.blit(text, textRect)
 
+def correctSolution(caption):
+  # Rect(left, top, width, height)
+  pygame.draw.rect(screen, GREEN, [(WIDTH + MARGIN) * BOARD_SIZE + WIDTH, 85, 150, 75])
+  text = font.render(caption, True, BLACK, GREEN)
+  textRect = text.get_rect()
+  textRect.center = ([(WIDTH + MARGIN) * BOARD_SIZE + WIDTH * 2, (HEIGHT + HEIGHT/2) + MARGIN])
+  screen.blit(text, textRect)
+
 # -------- Main Program Loop -----------
+correct_solution = False
 while not done:
   for event in pygame.event.get():  # User did something
     if event.type == pygame.QUIT:  # If user clicked close
@@ -98,9 +107,11 @@ while not done:
       column = pos[0] // (WIDTH + MARGIN)
       row = pos[1] // (HEIGHT + MARGIN)
       
-      # Button click
+      # Verify Button click
       if (((WIDTH + MARGIN) * BOARD_SIZE + WIDTH) < pos[0] < ((WIDTH + MARGIN) * BOARD_SIZE + WIDTH) + WIDTH*2):
-        g.verify()
+        if (MARGIN < pos[1] < MARGIN + HEIGHT):
+          correct_solution = g.verify()
+          display_correct_solution = True
         
       # Click in the grid
       if column < BOARD_SIZE:
@@ -118,16 +129,22 @@ while not done:
   # Set the screen background
   screen.fill(BLACK)
 
- 
+
   # Render the board
   g.render_board()
-  
+ 
 
   # Draw the grid
   draw_board()
 
-  # Draw Button
+  # Draw Verify Button
   draw_button()
+  
+  # Display whether the solution is correct
+  if correct_solution:
+    correctSolution("CORRECT!")
+  else:
+    correctSolution("wrong")
 
   # Limit to 60 frames per second
   clock.tick(60)
