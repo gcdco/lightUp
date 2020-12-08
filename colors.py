@@ -1,3 +1,13 @@
+"""
+ George Duensing
+ cs325: HW8
+ December 07, 2020
+ 
+ sources:
+  https://www.geeksforgeeks.org/python-display-text-to-pygame-window/
+  http://simpson.edu/computer-science/
+  
+"""
 # Define some colors
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)

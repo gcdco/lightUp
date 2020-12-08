@@ -14,10 +14,16 @@ class readFile:
     # First, open file to read.
     readFile = open(self.f, 'r')
     # Store each row of text in the list
-    lines = []
-    for line in readFile:
-        line = line.rstrip()
-        lines.append(line.split(','))
-    readFile.close()
+    
+    number_boards = readFile.pop(0)
+    board_dict = {}
+    for x in range(0,number_boards):
+      lines = []
+      key = readFile.pop(0)
+      for line in readFile:
+          line = line.rstrip()
+          lines.append(line.split(','))
+      board_dict[key] = lines
+      readFile.close()
 
-    return lines
+    return board_dict

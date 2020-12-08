@@ -1,15 +1,12 @@
 """
- Example program to show using an array to back a grid on-screen.
+ George Duensing
+ cs325: HW8
+ December 07, 2020
  
- Sample Python/Pygame Programs
- Simpson College Computer Science
- http://programarcadegames.com/
- http://simpson.edu/computer-science/
- 
- Explanation video: http://youtu.be/mdTeqiWyFnc
-
  sources:
   https://www.geeksforgeeks.org/python-display-text-to-pygame-window/
+  http://simpson.edu/computer-science/
+  
 """
 import pygame
 from readfile import readFile
@@ -38,17 +35,13 @@ lightImg = pygame.image.load('lightbulb.png')
 font = pygame.font.Font('freesansbold.ttf', 32)
 
 # Set title of screen
-pygame.display.set_caption("Array Backed Grid")
+pygame.display.set_caption("Light Up")
 
 # Loop until the user clicks the close button.
 done = False
 
 # Used to manage how fast the screen updates
 clock = pygame.time.Clock()
-
-rfile = readFile('boards.txt')
-lines = rfile.read()
-g = Game(lines)
 
 def draw_board():
   for row in range(BOARD_SIZE):
@@ -86,54 +79,89 @@ def draw_button():
   textRect.center = ([(WIDTH + MARGIN) * BOARD_SIZE + WIDTH * 2, HEIGHT/2 + MARGIN])
   screen.blit(text, textRect)
 
-# -------- Main Program Loop -----------
-while not done:
-  for event in pygame.event.get():  # User did something
-    if event.type == pygame.QUIT:  # If user clicked close
-      done = True  # Flag that we are done so we exit this loop
-    elif event.type == pygame.MOUSEBUTTONDOWN:
-      # User clicks the mouse. Get the position
-      pos = pygame.mouse.get_pos()
-      # Change the x/y screen coordinates to grid coordinates
-      column = pos[0] // (WIDTH + MARGIN)
-      row = pos[1] // (HEIGHT + MARGIN)
-      
-      # Button click
-      if (((WIDTH + MARGIN) * BOARD_SIZE + WIDTH) < pos[0] < ((WIDTH + MARGIN) * BOARD_SIZE + WIDTH) + WIDTH*2):
-        g.verify()
-        
-      # Click in the grid
-      if column < BOARD_SIZE:
-        if row < BOARD_SIZE:
-          # Set that location to one
-          if(g.get_color(row,column) == WHITE):
-            g.switch_on(row,column)
-          elif(g.get_color(row,column) == YELLOW):
-            g.switch_on(row,column)
-          elif(g.get_color(row,column) == LIGHT):
-            g.switch_off(row,column)
-      
-      print("Click ", pos, "Grid coordinates: ", row, column)
+def draw_button_quit():
+  # Rect(left, top, width, height)
+  pygame.draw.rect(screen, GREEN, [(WIDTH + MARGIN) * BOARD_SIZE + WIDTH, 85, 150, 75])
+  text = font.render("QUIT", True, BLACK, GREEN)
+  textRect = text.get_rect()
+  textRect.center = ([(WIDTH + MARGIN) * BOARD_SIZE + WIDTH * 2, (HEIGHT + HEIGHT/2) + MARGIN])
+  screen.blit(text, textRect)
 
-  # Set the screen background
-  screen.fill(BLACK)
-
- 
-  # Render the board
-  g.render_board()
+# -------- Game Loop -----------
+  rfile = readFile('boards.txt')
+  boards = rfile.read()
+  board_options = []
+  for option in range(0,len(boards):
+    print(boards[option])
+    #board_options.append(option)
   
+ 
+          
+      
 
-  # Draw the grid
-  draw_board()
 
-  # Draw Button
-  draw_button()
-
-  # Limit to 60 frames per second
-  clock.tick(60)
-
-  # Go ahead and update the screen with what we've drawn.
-  pygame.display.flip()
+# -------- Main Program Loop -----------
+menuDone = False
+  
+  g = Game(lines)
+while not menuDone:
+  
+  
+  while not done:
+    for event in pygame.event.get():  # User did something
+      if event.type == pygame.QUIT:  # If user clicked close
+        done = True  # Flag that we are done so we exit this loop
+      elif event.type == pygame.MOUSEBUTTONDOWN:
+        # User clicks the mouse. Get the position
+        pos = pygame.mouse.get_pos()
+        # Change the x/y screen coordinates to grid coordinates
+        column = pos[0] // (WIDTH + MARGIN)
+        row = pos[1] // (HEIGHT + MARGIN)
+        
+        # Verify Button click
+        if (((WIDTH + MARGIN) * BOARD_SIZE + WIDTH) < pos[0] < ((WIDTH + MARGIN) * BOARD_SIZE + WIDTH) + WIDTH*2):
+          if (0 < pos[1] < HEIGHT + MARGIN):
+            g.verify()
+        # Quit Button click
+        if (((WIDTH + MARGIN) * BOARD_SIZE + WIDTH) < pos[0] < ((WIDTH + MARGIN) * BOARD_SIZE + WIDTH) + WIDTH*2):
+          if (HEIGHT + MARGIN < pos[1] < HEIGHT * 2 + MARGIN ):
+            done = true
+          
+        # Click in the grid
+        if column < BOARD_SIZE:
+          if row < BOARD_SIZE:
+            # Set that location to one
+            if(g.get_color(row,column) == WHITE):
+              g.switch_on(row,column)
+            elif(g.get_color(row,column) == YELLOW):
+              g.switch_on(row,column)
+            elif(g.get_color(row,column) == LIGHT):
+              g.switch_off(row,column)
+        
+        print("Click ", pos, "Grid coordinates: ", row, column)
+  
+    # Set the screen background
+    screen.fill(BLACK)
+  
+   
+    # Render the board
+    g.render_board()
+    
+  
+    # Draw the grid
+    draw_board()
+  
+    # Draw Buttons
+    draw_button()
+    draw_button_quit()
+    
+    # Limit to 60 frames per second
+    clock.tick(60)
+  
+    # Go ahead and update the screen with what we've drawn.
+    pygame.display.flip()
+  
+  menuDone = True
 
 # Be IDLE friendly. If you forget this line, the program will 'hang'
 # on exit.

@@ -1,8 +1,20 @@
+"""
+ George Duensing
+ cs325: HW8
+ December 07, 2020
+ 
+ sources:
+  https://www.geeksforgeeks.org/python-display-text-to-pygame-window/
+  http://simpson.edu/computer-science/
+  
+"""
 from colors import WHITE, BLACK, GREEN, RED, YELLOW, LTYELLOW, LIGHT
 
 # Parent class
+# Board Space
 class Node:
   def __init__(self):
+    # Links to other spaces
     self.up = None
     self.dn = None
     self.left = None
@@ -35,20 +47,8 @@ class WhiteNode(Node):
     self.lightConflict = 0
     self.color = WHITE
 
-
   def switchOff(self):
     self.color = WHITE
-    
-    """ 
-    head = self.left
-    self.switchOffTraverse(head, goLeft)
-    head = self.right
-    self.switchOffTraverse(head, goRight)
-    head = self.dn
-    self.switchOffTraverse(head, goDown)
-    head = self.up
-    self.switchOffTraverse(head, goUp)
-    """
   
   # next = function that returns next (up,dn,lft,rt) link
   def switchOffTraverse(self, head, next):

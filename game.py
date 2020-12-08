@@ -1,4 +1,15 @@
+"""
+ George Duensing
+ cs325: HW8
+ December 07, 2020
+ 
+ sources:
+  https://www.geeksforgeeks.org/python-display-text-to-pygame-window/
+  http://simpson.edu/computer-science/
+  
+"""
 import node
+
 from colors import WHITE, BLACK, GREEN, RED, YELLOW, LTYELLOW, LIGHT, LIGHT_ERROR
 
 BOARD_SIZE = 7
